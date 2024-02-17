@@ -1,16 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
 public class FramingController : MonoBehaviour
 {
-  [SerializeField]
-  PlayerController player1;
-
-  [SerializeField]
-  PlayerController player2;
-
   [Header("Camera position/panning")]
 
   [SerializeField]
@@ -31,11 +25,13 @@ public class FramingController : MonoBehaviour
   private float verticalOffset;
   private Vector3 midPoint;
 
-  private Camera camera;
+  private Camera myCamera;
+
+  private List<GameObject> players;
 
   void Awake()
   {
-    camera = GetComponent<Camera>();
+    myCamera = GetComponent<Camera>();
   }
 
   void Start()
@@ -49,6 +45,11 @@ public class FramingController : MonoBehaviour
 
   void Update()
   {
+    if (players == null || players.Count < 2 || players.Any(p => p == null))
+    {
+      players = GameObject.FindGameObjectsWithTag("Player")?.ToList();
+    }
+
     midPoint = CharacterMidpoint();
     KeepCameraCentered();
     KeepCharactersInFrame();
@@ -66,19 +67,21 @@ public class FramingController : MonoBehaviour
   void KeepCharactersInFrame(bool force = false)
   {
     // Use p1 distance from camera position as basis for calculations, regardless of which side it's on
-    float p1DistanceFromCamCenter = Mathf.Abs(this.transform.position.x - player1.transform.position.x);
+    float p1DistanceFromCamCenter = Mathf.Abs(this.transform.position.x - players[0].transform.position.x);
 
     // Calculate & clamp viewport half-size
     float viewportHalfWidth = Mathf.Clamp(p1DistanceFromCamCenter + viewportMargin, minViewportSize.x/2, maxViewportSize.y/2);
-    float viewportHalfHeight = Mathf.Clamp(viewportHalfWidth / camera.aspect, minViewportSize.y / 2, maxViewportSize.x / 2);
+    float viewportHalfHeight = Mathf.Clamp(viewportHalfWidth / myCamera.aspect, minViewportSize.y / 2, maxViewportSize.x / 2);
 
     // Apply
-    camera.orthographicSize = viewportHalfHeight;
+    myCamera.orthographicSize = viewportHalfHeight;
   }
 
   Vector3 CharacterMidpoint()
   {
-    return (player1.gameObject.transform.position + player2.gameObject.transform.position) * 0.5f;
+    Vector3 total = Vector3.zero;
+    players.ForEach(p => total += p.transform.position);
+    return total / players.Count;
   }
 
   void OnDrawGizmos()

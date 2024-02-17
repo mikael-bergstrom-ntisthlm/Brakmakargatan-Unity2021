@@ -1,152 +1,129 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerController))]
 public class PlayerBasicMovement : MonoBehaviour
 {
+  public enum movementType { Right, Left, None };
 
-    public enum movementType { Right, Left, None };
+  [SerializeField]
+  float horizontalSpeed;
 
-    [SerializeField]
-    float horizontalSpeed;
+  [SerializeField]
+  float jumpForce;
 
-    [SerializeField]
-    float jumpForce;
+  [SerializeField]
+  LayerMask groundLayer;
 
-    [SerializeField]
-    LayerMask groundLayer;
+  [SerializeField]
+  GameObject spriteObject;
 
-    [SerializeField]
-    GameObject spriteObject;
+  Rigidbody2D rb;
+  Animator animator;
 
-    Rigidbody2D rb;
-    PlayerController playerController;
-    Animator animator;
+  private Vector2 inputVector;
+  private bool jumpPressed = false;
+  private bool flipped = false;
 
-    private string verticalAxis;
-    private string horizontalAxis;
+  public movementType LastMovement { get; private set; }
 
-    
+  void Awake()
+  {
+    rb = GetComponent<Rigidbody2D>();
+    animator = spriteObject.GetComponent<Animator>();
+  }
 
-    private bool flipped = false;
+  void Update()
+  {
+    CheckHorizontalMovement();
+    CheckJump();
+    CheckMirrored(GetComponent<PlayerController>().Opponent.gameObject);
+  }
 
-    public movementType LastMovement
+  public void CheckHorizontalMovement()
+  {
+    Vector2 movementVector = horizontalSpeed * inputVector.x * Vector2.right;
+
+    if (movementVector.magnitude > 0)
     {
-        get; private set;
+      LastMovement = movementVector.x > 0 ? movementType.Right : movementType.Left;
     }
 
-    bool hasReleasedJumpButton = true;
+    transform.Translate(movementVector * Time.deltaTime);
+    animator.SetFloat("xmove", movementVector.x);
+  }
 
-    void Start()
+  private void CheckJump()
+  {
+    bool grounded = IsOnGround();
+
+    if (jumpPressed && grounded)
     {
-        rb = GetComponent<Rigidbody2D>();
-        playerController = GetComponent<PlayerController>();
+      rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+    }
+    jumpPressed = false;
+    animator.SetBool("onground", grounded);
+  }
 
-        animator = spriteObject.GetComponent<Animator>();
+  public void CheckMirrored(GameObject target)
+  {
+    bool isOnTheRight = target.transform.position.x < transform.position.x;
 
-        horizontalAxis = playerController.HorizontalAxis;
-        verticalAxis = playerController.VerticalAxis;
+    if (isOnTheRight != flipped)
+    {
+      // Flip entire object (because we also want to flip sub-objects)
+      Vector3 workingScale = spriteObject.transform.localScale;
+      workingScale.x *= -1;
+      spriteObject.transform.localScale = workingScale;
+
+      // Flip the x-offsets of the base fighter object's colliders, just in case
+      Collider2D[] colliders = GetComponents<Collider2D>();
+      foreach (Collider2D collider in colliders)
+      {
+        Vector2 offset = collider.offset;
+        offset.x *= -1;
+        collider.offset = offset;
+      }
+
+      flipped = !flipped;
     }
 
-    void Update()
-    {
+  }
 
-        float horizontalAxisValue = Input.GetAxisRaw(horizontalAxis);
-        float verticalAxisValue = Input.GetAxisRaw(verticalAxis);
+  private bool IsOnGround()
+  {
+    (Vector2 checkerPosition, Vector2 checkerSize) = GetGroundCheckerValues();
 
-        CheckHorizontalMovement(horizontalAxisValue);
-        CheckJump(verticalAxisValue);
-        CheckMirrored(GetComponent<PlayerController>().Opponent.gameObject);
-    }
+    bool isOnGround = Physics2D.OverlapBox(checkerPosition, checkerSize, 0, groundLayer);
 
+    return isOnGround;
+  }
 
-    public void CheckHorizontalMovement(float horizontalAxisValue)
-    {
-        Vector2 movementVector = Vector2.zero;
+  private (Vector2 position, Vector2 size) GetGroundCheckerValues()
+  {
+    Collider2D collider = GetComponent<Collider2D>();
 
-        if (horizontalAxisValue > 0)
-        {
-            LastMovement = movementType.Right;
-            movementVector += Vector2.right * horizontalAxisValue * horizontalSpeed * Time.deltaTime;
-        }
-        else if (horizontalAxisValue < 0)
-        {
-            LastMovement = movementType.Left;
-            movementVector += Vector2.right * horizontalAxisValue * horizontalSpeed * Time.deltaTime;
-        }
+    Vector2 size = new(
+      collider.bounds.size.x,
+      0.4f
+    );
 
-        transform.Translate(movementVector);
+    Vector2 position = 
+    new(
+      collider.bounds.center.x,
+      collider.bounds.min.y
+    );
 
-        animator.SetFloat("xmove", horizontalAxisValue);
-    }
+    return (position, size);
+  }
 
-    private void CheckJump(float verticalAxisValue)
-    {
+  private void OnMove(InputValue value) => inputVector = value.Get<Vector2>();
+  private void OnJump(InputValue value) => jumpPressed = true;
 
-        bool grounded = IsOnGround();
-
-        if (verticalAxisValue > 0 && hasReleasedJumpButton == true && grounded)
-        {
-            DoJump();
-            hasReleasedJumpButton = false;
-        }
-        else if (verticalAxisValue <= 0)
-        {
-            hasReleasedJumpButton = true;
-        }
-
-        animator.SetBool("onground", grounded);
-    }
-
-    public void CheckMirrored(GameObject target)
-    {
-        bool isOnTheRight = target.transform.position.x < transform.position.x;
-
-        if (isOnTheRight != flipped)
-        {
-            Vector3 workingScale = spriteObject.transform.localScale;
-            workingScale.x *= -1;
-            spriteObject.transform.localScale = workingScale;
-
-            Collider2D[] colliders = GetComponents<Collider2D>();
-            foreach(Collider2D collider in colliders)
-            {
-                Vector2 offset = collider.offset;
-                offset.x *= -1;
-                collider.offset = offset;
-            }
-
-            flipped = !flipped;
-        }
-
-    }
-
-
-
-    public void DoJump()
-    {
-        Vector3 newVelocity = rb.velocity;
-
-        newVelocity.y += jumpForce;
-
-        rb.velocity = newVelocity;
-    }
-
-    private bool IsOnGround()
-    {
-
-        Vector2 sizeOfGroundChecker = Vector2.up * 0.4f;
-
-        Collider2D collider = GetComponent<Collider2D>();
-
-        sizeOfGroundChecker.x = collider.bounds.size.x;
-
-        Vector2 positionOfGroundChecker = (Vector2)transform.position + Vector2.down * collider.bounds.extents.y;
-
-        bool isOnGround = Physics2D.OverlapBox(positionOfGroundChecker, sizeOfGroundChecker, 0, groundLayer);
-
-        return isOnGround;
-    }
+  private void OnDrawGizmosSelected()
+  {
+    (Vector2 checkerPosition, Vector2 checkerSize) = GetGroundCheckerValues();
+    Gizmos.DrawWireCube(checkerPosition, checkerSize);
+  }
 
 }

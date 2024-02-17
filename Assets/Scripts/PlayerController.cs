@@ -1,93 +1,32 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+  [SerializeField]
+  string fighterName;
 
-    [SerializeField]
-    string fighterName;
+  [SerializeField]
+  PlayerController opponent;
 
-    [SerializeField]
-    PlayerController opponent;
-    
-    public PlayerController Opponent
-    {
-        private set
-        {
-            opponent = value;
-        }
-        get
-        {
-            return opponent;
-        }
+  public PlayerController Opponent {
+    get {
+      if (opponent == null) opponent = FindOpponent();
+      return opponent;
     }
+  }
 
-    private void Start()
-    {
-        Opponent = FindOpponent();
-    }
+  private void Update()
+  {
+    if (opponent == null) opponent = FindOpponent();
+  }
 
-    public string FighterName
-    {
-        private set
-        {
-            fighterName = value;
-        }
-        get
-        {
-            return fighterName;
-        }
-    }
+  public string FighterName => fighterName;
 
-    public string controlPrefix = "P1";
+  public PlayerController FindOpponent()
+  {
+    GameObject[] candidates = GameObject.FindGameObjectsWithTag("Player");
 
-    public string VerticalAxis
-    {
-        private set { }
-        get
-        {
-            return controlPrefix + "Vertical";
-        }
-    }
-
-    public string HorizontalAxis
-    {
-        private set { }
-        get
-        {
-            return controlPrefix + "Horizontal";
-        }
-    }
-
-    public string PunchAxis
-    {
-        private set { }
-        get
-        {
-            return controlPrefix + "Fire1";
-        }
-    }
-
-    public string KickAxis
-    {
-        private set { }
-        get
-        {
-            return controlPrefix + "Fire2";
-        }
-    }
-
-    public PlayerController FindOpponent()
-    {
-        GameObject[] candidates = GameObject.FindGameObjectsWithTag("Player");
-
-        foreach (GameObject candidate in candidates)
-        {
-            if (candidate != this.gameObject)
-            {
-                return candidate.GetComponent<PlayerController>();
-            }
-        }
-
-        return this;
-    }
+    return candidates.First(c => c != this.gameObject).GetComponent<PlayerController>();
+  }
 }
