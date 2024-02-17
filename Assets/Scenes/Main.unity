@@ -382,9 +382,9 @@ MonoBehaviour:
   player2: {fileID: 1095771566}
   cameraFollowX: 1
   cameraFollowY: 0
-  minCameraWidth: 7
-  maxCameraWidth: 10
-  cameraMargin: 1
+  minViewportSize: {x: 12, y: 7}
+  maxViewportSize: {x: 24, y: 30}
+  viewportMargin: 2
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -1406,6 +1406,80 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1706429754}
   m_CullTransparentMesh: 0
+--- !u!1001 &1750071706
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1568840019862704910, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 8e63a2c4d2fe18b4e96c142fb256fd0a, type: 3}
+    - target: {fileID: 2991135116438830039, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991135116438830039, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991135116438830039, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991135116438830039, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991135116438830039, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991135116438830039, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991135116438830039, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991135116438830039, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991135116438830039, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991135116438830039, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991135116438830039, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4541905849379676771, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
+      propertyPath: m_Name
+      value: MusicPlayer
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b846c0fbc8d676f41a501d84c4bb4880, type: 3}
 --- !u!1 &1799714867
 GameObject:
   m_ObjectHideFlags: 0
@@ -1547,7 +1621,7 @@ Canvas:
   m_GameObject: {fileID: 2072697407}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0

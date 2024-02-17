@@ -29,6 +29,7 @@ public class FramingController : MonoBehaviour
   float viewportMargin = 1;
 
   private float verticalOffset;
+  private Vector3 midPoint;
 
   private Camera camera;
 
@@ -39,7 +40,7 @@ public class FramingController : MonoBehaviour
 
   void Start()
   {
-    Vector3 midPoint = CharacterMidpoint();
+    midPoint = CharacterMidpoint();
     verticalOffset = this.transform.position.y - midPoint.y; // how much above the midpoint between the character the camera should be
 
     KeepCameraCentered();
@@ -48,14 +49,13 @@ public class FramingController : MonoBehaviour
 
   void Update()
   {
+    midPoint = CharacterMidpoint();
     KeepCameraCentered();
     KeepCharactersInFrame();
   }
 
   void KeepCameraCentered()
   {
-    Vector3 midPoint = CharacterMidpoint();
-
     transform.position = new Vector3(
         (cameraFollowX ? 1 : 0) * midPoint.x,
         (cameraFollowY ? 1 : 0) * (midPoint.y + verticalOffset),
