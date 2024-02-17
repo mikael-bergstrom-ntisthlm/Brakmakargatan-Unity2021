@@ -13,6 +13,7 @@
 - [ ] Bygga om animationssystemet så det inte använder transitions/triggers längre
 - [ ] Bygga Moves-systemet mer flexibelt
 - [ ] Parallax-bakgrunder?
+- [ ] Settings-skärm, möjligen med keybindings
 # Lång sikt
 - [ ] Bygga så karaktärer enkelt kan exporteras och flyttas mellan spel
 - [ ] En "character select"-skärm

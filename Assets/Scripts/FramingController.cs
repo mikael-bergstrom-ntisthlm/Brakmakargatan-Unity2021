@@ -28,6 +28,17 @@ public class FramingController : MonoBehaviour
   private Camera myCamera;
 
   private List<GameObject> players;
+  private List<GameObject> Players
+  {
+    get
+    {
+      if (players == null || players.Count < 2 || players.Any(p => p == null))
+      {
+        players = GameObject.FindGameObjectsWithTag("Player")?.ToList();
+      }
+      return players;
+    }
+  }
 
   void Awake()
   {
@@ -45,11 +56,6 @@ public class FramingController : MonoBehaviour
 
   void Update()
   {
-    if (players == null || players.Count < 2 || players.Any(p => p == null))
-    {
-      players = GameObject.FindGameObjectsWithTag("Player")?.ToList();
-    }
-
     midPoint = CharacterMidpoint();
     KeepCameraCentered();
     KeepCharactersInFrame();
@@ -70,7 +76,7 @@ public class FramingController : MonoBehaviour
     float p1DistanceFromCamCenter = Mathf.Abs(this.transform.position.x - players[0].transform.position.x);
 
     // Calculate & clamp viewport half-size
-    float viewportHalfWidth = Mathf.Clamp(p1DistanceFromCamCenter + viewportMargin, minViewportSize.x/2, maxViewportSize.y/2);
+    float viewportHalfWidth = Mathf.Clamp(p1DistanceFromCamCenter + viewportMargin, minViewportSize.x / 2, maxViewportSize.y / 2);
     float viewportHalfHeight = Mathf.Clamp(viewportHalfWidth / myCamera.aspect, minViewportSize.y / 2, maxViewportSize.x / 2);
 
     // Apply
@@ -80,11 +86,11 @@ public class FramingController : MonoBehaviour
   Vector3 CharacterMidpoint()
   {
     Vector3 total = Vector3.zero;
-    players.ForEach(p => total += p.transform.position);
-    return total / players.Count;
+    Players.ForEach(p => total += p.transform.position);
+    return total / Players.Count;
   }
 
-  void OnDrawGizmos()
+  void OnDrawGizmosSelected()
   {
     Gizmos.DrawWireSphere(CharacterMidpoint(), 1f);
   }
