@@ -1,0 +1,7 @@
+- [x] Bakgrundsmusik
+- [x] Fixa kamerabugg
+- [x] Visuell feedback när man träffar
+- [x] Instruktioner för musikbyte
+- [x] Instruktioner för bakgrundsbyte
+- [ ] Implementera Unit Input System
+- [ ] Instruktioner för att ändra keybindings

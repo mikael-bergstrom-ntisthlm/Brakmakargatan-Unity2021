@@ -4,35 +4,23 @@ using UnityEngine;
 
 public class DamageDealer : MonoBehaviour
 {
+  public enum DamageTypeEnum
+  {
+    physical
+  }
 
-    [SerializeField]
-    float damageAmount = 10;
+  [SerializeField]
+  float damageAmount = 10;
 
-    [SerializeField]
-    PlayerBasicDamage.DamageTypeEnum damageType = PlayerBasicDamage.DamageTypeEnum.physical;
+  [SerializeField]
+  DamageTypeEnum damageType = DamageTypeEnum.physical;
 
-    public float DamageAmount
-    {
-        private set
-        {
-            damageAmount = value;
-        }
-        get
-        {
-            return damageAmount;
-        }
-    }
+  // Read only public properties
+  public float DamageAmount => damageAmount;
+  public DamageTypeEnum DamageType => damageType;
 
-    public PlayerBasicDamage.DamageTypeEnum DamageType
-    {
-        private set
-        {
-            damageType = value;
-        }
-        get
-        {
-            return damageType;
-        }
-    }
-
+  private void OnCollisionEnter2D(Collision2D other)
+  {
+    other.gameObject.GetComponent<PlayerBasicDamage>()?.Hurt(this, other.GetContact(0).point);
+  }
 }

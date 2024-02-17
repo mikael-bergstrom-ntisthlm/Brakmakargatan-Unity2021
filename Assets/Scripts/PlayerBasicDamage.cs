@@ -6,80 +6,51 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(PlayerController))]
 public class PlayerBasicDamage : MonoBehaviour
 {
-    public enum DamageTypeEnum
+
+  [SerializeField]
+  ProgressHandler[] healthMonitors;
+
+  [SerializeField]
+  float maxHealth = 100;
+
+  [SerializeField]
+  GameObject damageSplash;
+
+  float health;
+  float Health
+  {
+    set
     {
-        physical
+      health = Mathf.Clamp(value, 0, maxHealth);
+
+      foreach (ProgressHandler handler in healthMonitors)
+      {
+        handler.UpdateValues(health, maxHealth);
+      }
+
+      CheckDeath();
     }
+    get => health;
+  }
 
-    [SerializeField]
-    ProgressHandler[] healthMonitors;
+  private void Start()
+  {
+    health = maxHealth;
+  }
 
+  public void Hurt(DamageDealer damageDealer, Vector3 location)
+  {
+    Instantiate(damageSplash, location, Quaternion.identity);
 
-    [SerializeField]
-    float maxHealth = 100;
+    Health -= damageDealer.DamageAmount;
+  }
 
-    float health;
-
-    float Health
+  private void CheckDeath()
+  {
+    if (Health <= 0)
     {
-        set
-        {
-            health = Mathf.Clamp(value, 0, maxHealth);
-            
-            foreach(ProgressHandler handler in healthMonitors)
-            {
-                handler.UpdateValues(health, maxHealth);
-            }
-
-            CheckDeath();
-
-        }
-        get
-        {
-            return health;
-        }
+      GameStateManager.winnerName = GetComponent<PlayerController>().Opponent.FighterName;
+      SceneManager.LoadScene("GameOver");
     }
-
-
-
-    private void Start()
-    {
-        health = maxHealth;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        HashSet<Collider2D> colliders = new HashSet<Collider2D>();
-        
-        for (int i = 0; i < collision.contactCount; i++)
-        {
-            ContactPoint2D contactPoint = collision.GetContact(i);
-
-            if (contactPoint.collider.tag == "Punch" || contactPoint.collider.tag == "Kick")
-            {
-                DamageDealer damageDealer = contactPoint.collider.GetComponent<DamageDealer>();
-
-                if (damageDealer != null && !colliders.Contains(contactPoint.collider))
-                {
-                    float damage = damageDealer.DamageAmount;
-                    Health -= damage;
-                }
-
-                colliders.Add(contactPoint.collider);
-
-            }
-
-        }
-
-    }
-
-    private void CheckDeath()
-    {
-        if (Health <= 0)
-        {
-            GameStateManager.winnerName = GetComponent<PlayerController>().Opponent.FighterName;
-            SceneManager.LoadScene("GameOver");
-        }
-    }
-
+  }
 }

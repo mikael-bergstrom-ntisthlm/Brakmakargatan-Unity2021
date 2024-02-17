@@ -882,6 +882,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1568840019862704910, guid: b846c0fbc8d676f41a501d84c4bb4880,
         type: 3}
+      propertyPath: m_Pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1568840019862704910, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
+      propertyPath: m_Volume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1568840019862704910, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
       propertyPath: m_audioClip
       value: 
       objectReference: {fileID: 8300000, guid: 56d48790b9b78db4bb6071bb8efd24fd, type: 3}

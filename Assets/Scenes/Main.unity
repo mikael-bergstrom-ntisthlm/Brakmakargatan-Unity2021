@@ -198,7 +198,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 201, y: 33}
+  m_SizeDelta: {x: 250, y: 30}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &359956298
 MonoBehaviour:
@@ -490,7 +490,7 @@ GameObject:
   - component: {fileID: 622252487}
   - component: {fileID: 622252486}
   m_Layer: 0
-  m_Name: grayclouds
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -675,11 +675,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2873020845636030208, guid: 7fd0f975ca319364e9f2385804e5c03b,
         type: 3}
-      propertyPath: healthMonitors.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2873020845636030208, guid: 7fd0f975ca319364e9f2385804e5c03b,
-        type: 3}
       propertyPath: healthMonitors.Array.data[0]
       value: 
       objectReference: {fileID: 359956298}
@@ -736,7 +731,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 30}
+  m_SizeDelta: {x: 250, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1104678417
 MonoBehaviour:
@@ -1228,7 +1223,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1429201265 stripped
 MonoBehaviour:
@@ -1313,6 +1308,12 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 1022052006}
+    - target: {fileID: 2873020845636030208, guid: 7fd0f975ca319364e9f2385804e5c03b,
+        type: 3}
+      propertyPath: damageSplash
+      value: 
+      objectReference: {fileID: 5927868523883019321, guid: dd5c22b0dbda1e34d947a297a28ae901,
+        type: 3}
     - target: {fileID: 2873020845636030208, guid: 7fd0f975ca319364e9f2385804e5c03b,
         type: 3}
       propertyPath: healthMonitors.Array.size
@@ -1415,13 +1416,18 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1568840019862704910, guid: b846c0fbc8d676f41a501d84c4bb4880,
         type: 3}
+      propertyPath: m_Volume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1568840019862704910, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
       propertyPath: m_audioClip
       value: 
       objectReference: {fileID: 8300000, guid: 8e63a2c4d2fe18b4e96c142fb256fd0a, type: 3}
     - target: {fileID: 2991135116438830039, guid: b846c0fbc8d676f41a501d84c4bb4880,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2991135116438830039, guid: b846c0fbc8d676f41a501d84c4bb4880,
         type: 3}
@@ -1477,6 +1483,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MusicPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 4541905849379676771, guid: b846c0fbc8d676f41a501d84c4bb4880,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b846c0fbc8d676f41a501d84c4bb4880, type: 3}
@@ -1551,7 +1562,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2072697407
 GameObject:
@@ -1601,7 +1612,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -1622,7 +1633,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 519420031}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -1632,7 +1643,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!224 &2072697411
 RectTransform:
@@ -1649,7 +1660,7 @@ RectTransform:
   - {fileID: 1104678416}
   - {fileID: 359956297}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
