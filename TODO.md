@@ -15,6 +15,7 @@
 - [ ] Bygga Moves-systemet mer flexibelt
 - [ ] Parallax-bakgrunder?
 - [ ] Settings-skärm, möjligen med keybindings
+- [ ] Dokumentation på separat sida, kanske Gitbook, istf gdocs
 # Lång sikt
 - [ ] Bygga så karaktärer enkelt kan exporteras och flyttas mellan spel
 - [ ] En "character select"-skärm
